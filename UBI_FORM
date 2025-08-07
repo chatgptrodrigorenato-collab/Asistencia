@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro con ubicación</title>
+  <script>
+    function registrarUbicacion() {
+      if (!navigator.geolocation) {
+        alert("Tu navegador no soporta geolocalización.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(6);
+          const lng = position.coords.longitude.toFixed(6);
+          const ubicacion = `${lat},${lng}`;
+
+          // ➕ Aquí puedes pedir DNI, nombre, apellido desde prompts o formulario
+          const dni = prompt("Ingresa tu DNI:");
+          const nombre = prompt("Ingresa tu nombre:");
+          const apellido = prompt("Ingresa tu apellido:");
+
+          const data = {
+            dni,
+            nombre,
+            apellido,
+            ubicacion
+          };
+
+          // Reemplaza esta URL con tu propia URL del Apps Script desplegado
+          const url = "https://script.google.com/macros/s/AKfycb.../exec";
+
+          fetch(url, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json"
+            }
+          })
+          .then(response => response.text())
+          .then(result => {
+            alert("Registro completado correctamente.");
+          })
+          .catch(error => {
+            alert("Error al registrar ubicación.");
+            console.error(error);
+          });
+        },
+        (error) => {
+          alert("No se pudo obtener ubicación. Permite el acceso en el navegador.");
+          console.error(error);
+        }
+      );
+    }
+
+    window.onload = registrarUbicacion;
+  </script>
+</head>
+<body>
+  <h2>Registrando tu asistencia con ubicación...</h2>
+</body>
+</html>
