@@ -1,31 +1,37 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Capturando ubicación...</title>
-    <script>
-      function enviarUbicacion() {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(pos) {
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
-            const ubicacion = lat + "," + lon;
-
-            const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe9XfDR5W5ZTmh4u7FAdEW7rRr2b9WX2uwOn3CSgFl0vmY85g/viewform?usp=pp_url";
-            const finalUrl = formUrl + "&entry.1869713733=" + encodeURIComponent(ubicacion);
-
-            window.location.href = finalUrl;
-          }, function(err) {
-            alert("No se pudo obtener la ubicación.");
-          });
-        } else {
-          alert("Tu navegador no soporta geolocalización.");
-        }
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro con Ubicación</title>
+  <script>
+    function redirigirConUbicacion() {
+      const urlBase = "https://docs.google.com/forms/d/e/1FAIpQLScfS4RKMXULBYuTapuIkj7rbb2Tv6VpCdgx-r_JgYh92hLbjA/viewform?usp=pp_url&entry.1869713733=";
+      
+      if (!navigator.geolocation) {
+        alert("Tu navegador no permite acceder a la ubicación.");
+        return;
       }
 
-      window.onload = enviarUbicacion;
-    </script>
-  </head>
-  <body>
-    <p>Obteniendo ubicación...</p>
-  </body>
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(6);
+          const lng = position.coords.longitude.toFixed(6);
+          const ubicacion = encodeURIComponent(`${lat},${lng}`);
+          const finalUrl = urlBase + ubicacion;
+          window.location.href = finalUrl;
+        },
+        (error) => {
+          alert("No se pudo obtener tu ubicación. Activa los permisos de ubicación.");
+          console.error("Error de geolocalización:", error);
+        }
+      );
+    }
+
+    window.onload = redirigirConUbicacion;
+  </script>
+</head>
+<body>
+  <h2>Obteniendo tu ubicación...</h2>
+  <p>Por favor espera mientras te redirigimos al formulario.</p>
+</body>
 </html>
