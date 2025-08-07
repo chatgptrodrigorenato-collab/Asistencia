@@ -2,11 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Registro con Ubicación</title>
+  <title>Registro de asistencia con ubicación</title>
   <script>
     function redirigirConUbicacion() {
-      const urlBase = "https://docs.google.com/forms/d/e/1FAIpQLScfS4RKMXULBYuTapuIkj7rbb2Tv6VpCdgx-r_JgYh92hLbjA/viewform?usp=pp_url&entry.1869713733";
-      
       if (!navigator.geolocation) {
         alert("Tu navegador no permite acceder a la ubicación.");
         return;
@@ -17,12 +15,15 @@
           const lat = position.coords.latitude.toFixed(6);
           const lng = position.coords.longitude.toFixed(6);
           const ubicacion = encodeURIComponent(`${lat},${lng}`);
-          const finalUrl = urlBase + ubicacion;
-          window.location.href = finalUrl;
+
+          const url = `https://docs.google.com/forms/d/e/1FAIpQLScfS4RKMXULBYuTapuIkj7rbb2Tv6VpCdgx-r_JgYh92hLbjA/viewform?usp=pp_url&entry.1869713733=${ubicacion}`;
+
+          // Redirigir al formulario con ubicación incluida
+          window.location.href = url;
         },
         (error) => {
-          alert("No se pudo obtener tu ubicación. Activa los permisos de ubicación.");
-          console.error("Error de geolocalización:", error);
+          alert("Error al obtener ubicación. Verifica los permisos.");
+          console.error(error);
         }
       );
     }
@@ -31,7 +32,7 @@
   </script>
 </head>
 <body>
-  <h2>Obteniendo tu ubicación...</h2>
+  <h2>Obteniendo ubicación...</h2>
   <p>Por favor espera mientras te redirigimos al formulario.</p>
 </body>
 </html>
